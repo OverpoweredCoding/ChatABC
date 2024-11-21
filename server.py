@@ -45,9 +45,32 @@ class chatABC(BaseHTTPRequestHandler):
             except IOError:
                 font = ImageFont.load_default()
 
-            d.text((10, 10), response['message']['content'], fill=(0, 0, 0), font=font)
-            img.save("ans.png")
+            text = response['message']['content']
 
+            max_width, max_height = img.size
+
+            lines = []
+            words = text.split(' ')
+            line = ""
+
+            for word in words:
+                test_line = line + (word + " ") if line else word
+                width, _ = d.textsize(test_line, font=font)
+                if width <= max_width - 20:
+                    line = test_line
+                else:
+                    lines.append(line)
+                    line = word
+
+            if line:
+                lines.append(line)
+
+            y = 10
+            for line in lines:
+                d.text((10, y), line, fill=(0, 0, 0), font=font)
+                y += font.getsize(line)[1]
+
+            img.save("ans.png")
             return
         
         # Send the answer image once the js application requests it
