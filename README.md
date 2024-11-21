@@ -14,13 +14,13 @@ Hello! I'm just an innocent LLM called ChatABC. There's nothing to see here! Kee
  7. Copy paste the URL into the core URL variable of the javascript application
  8. Run the javascript application
 
-# How do I use it?
-
-Follow the steps above to start to local server. This will become the sorce by which the application draws it's answers when the user inputs questions. After the local server is running, click start on the web application. Upon waiting a few seconds, the loading screen should fade away and the user will be presented with a start button. Pressing this launches a chat window. Simply type your chats into the text box and press enter and an API call will be sent to the local server. After approximately 30 seconds, the server will return a reply and the web application will render it in the black space above the text box. Do not press enter multiple times - this will only make the process take longer.
-
 # Live Application
 
 A link to the web application can be found [here](https://studio.code.org/projects/applab/YvT1JCEPzOhe3nEVK9zztcyW5_n71eTiMDkcvpm4qI8)
+
+# How do I use it?
+
+Follow the steps above to start to local server. This will become the sorce by which the application draws it's answers when the user inputs questions. After the local server is running, click start on the web application. Upon waiting a few seconds, the loading screen should fade away and the user will be presented with a start button. Pressing this launches a chat window. Simply type your chats into the text box and press enter and an API call will be sent to the local server. After approximately 30 seconds, the server will return a reply and the web application will render it in the black space above the text box. Do not press enter multiple times - this will only make the process take longer.
 
 # "Devlog"
 
