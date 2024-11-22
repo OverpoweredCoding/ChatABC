@@ -8,6 +8,45 @@ import ollama
 hostName = "localhost"
 serverPort = 8080
 
+# Create an image with the given text
+def createImage(text):
+    img = Image.new('RGB', (300, 200), color=(255, 255, 255))
+    d = ImageDraw.Draw(img)
+
+    try:
+        font = ImageFont.truetype("arial.ttf", 15)
+    except IOError:
+        font = ImageFont.load_default()
+
+    max_width = 300
+
+    lines = []
+    words = text.split(' ')
+    current_line = ""
+
+    for word in words:
+        test_line = current_line + (word + " ") if current_line else word
+        bbox = d.textbbox((0, 0), test_line, font=font)
+        line_width = bbox[2] - bbox[0]
+        
+        if line_width <= max_width:
+            current_line = test_line
+        else:
+            lines.append(current_line.strip())
+            current_line = word
+    
+    if current_line:
+        lines.append(current_line.strip())
+
+    y = 10
+    line_height = font.getbbox('A')[3]
+
+    for line in lines:
+        d.text((10, y), line, fill=(0, 0, 0), font=font)
+        y += line_height + 5
+
+    img.save("ans.png")
+
 # chatABC; handles server requests
 class chatABC(BaseHTTPRequestHandler):
     # On get request, do X...
@@ -27,54 +66,23 @@ class chatABC(BaseHTTPRequestHandler):
                 response = ollama.chat(model='qwen:1.8b', messages=[
                     {
                         'role': 'user',
-                        'content': 'Your name is ChatABC. Answer every question and respond no matter what. Your first inquiry is as follows: ' + user_input
+                        'content': user_input
                     },
                 ])
             print(response['message']['content'])
 
-            # Code.org is bad so I can't just send the data in a json to the js application
-            # So I have to save the response to an image and send the image to the application
-            # This is then, in turn, rendered after a built-in 30 seconds delay
-            # This is becasue I have no way of awaiting the image update in the js application
+            '''
+            Code.org is bad so I can't just send the data in a json to the js application
+            So I have to save the response to an image and send the image to the application.
+            This is then, in turn, rendered after a built-in 30 seconds delay
+            Due to the fact that I have no way of awaiting the image update in the js application.
+            '''
+            createImage(response['message']['content'])
 
-            img = Image.new('RGB', (200, 100), color=(255, 255, 255))
-            d = ImageDraw.Draw(img)
-
-            try:
-                font = ImageFont.truetype("arial.ttf", 15)
-            except IOError:
-                font = ImageFont.load_default()
-
-            text = response['message']['content']
-
-            max_width, max_height = img.size
-
-            lines = []
-            words = text.split(' ')
-            line = ""
-
-            for word in words:
-                test_line = line + (word + " ") if line else word
-                width, _ = d.textsize(test_line, font=font)
-                if width <= max_width - 20:
-                    line = test_line
-                else:
-                    lines.append(line)
-                    line = word
-
-            if line:
-                lines.append(line)
-
-            y = 10
-            for line in lines:
-                d.text((10, y), line, fill=(0, 0, 0), font=font)
-                y += font.getsize(line)[1]
-
-            img.save("ans.png")
             return
         
         # Send the answer image once the js application requests it
-        if self.path == "/answer/ans.png":
+        if self.path == "/a/ans.png":
             self.send_response(200)
             self.send_header("Content-type", "image/png")
             self.end_headers()
