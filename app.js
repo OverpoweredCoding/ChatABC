@@ -8,7 +8,7 @@ function runner() {setScreen("start_screen")}
 // Render answer image
 function updateAnswer() {
   playSound("https://cdn.pixabay.com/audio/2024/02/07/audio_05ef91af0b.mp3");
-  setImageURL("answer", "https://" + coreURL + "/answer/ans.png");
+  setImageURL("answer", "https://" + coreURL + "/a/ans.png");
 }
 
 // Start
