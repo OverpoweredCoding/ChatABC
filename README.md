@@ -1,7 +1,6 @@
 # Welcome to ChatABC!
 
-Hello! I'm just an innocent LLM called ChatABC. There's nothing to see here! Keep scrolling...
-
+I challenged myself to integrate an LLM into a code.org application for an assignment.
 
 # Installation Instructions
 
